@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CodeNames</string>
+    <string name="client">Игрок</string>
+    <string name="master">Ведущий</string>
+    <string name="seed_apply">Применить</string>
+    <string name="seed_cancel">Отмена</string>
+    <string name="seed_title">Изменить сид</string>
+    <string name="word_seed_title">Сид на слова:</string>
+    <string name="mask_seed_title">Сид на маску:</string>
+</resources>
