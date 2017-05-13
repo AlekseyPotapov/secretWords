@@ -5,12 +5,11 @@ import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-
-import java.util.Set;
 
 public class BoardActivity extends AppCompatActivity {
 
@@ -21,10 +20,12 @@ public class BoardActivity extends AppCompatActivity {
      */
 
     public static final String TYPE = "game_type";
+    public static final int TIMER_MAX_TIME = 300000;
 
     private FrameLayout mRoot;
     private BoardUtils mBoardUtils;
     private ProgressBar mProgressBar;
+    private CountDownTimer mCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,19 @@ public class BoardActivity extends AppCompatActivity {
         });
         mRoot = (FrameLayout) findViewById(R.id.root);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        mCountDownTimer = new CountDownTimer(TIMER_MAX_TIME, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mProgressBar.setProgress((int) ((TIMER_MAX_TIME - millisUntilFinished) * 100 / TIMER_MAX_TIME));
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+
         createNewBoard();
     }
 
@@ -60,25 +74,25 @@ public class BoardActivity extends AppCompatActivity {
     }
 
     private void createNewBoard() {
-        mRoot.addView(new BoardView(
+        BoardView boardView = new BoardView(
                 this,
                 mBoardUtils.generateWords(),
                 mBoardUtils.generateMask(),
-                getIntent().getIntExtra(TYPE, BoardUtils.TYPE_CLIENT)),
-                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        showProgress();
+                getIntent().getIntExtra(TYPE, BoardUtils.TYPE_CLIENT));
+
+        boardView.setOnWordClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startProgress();
+            }
+        });
+        mRoot.addView(boardView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        startProgress();
     }
 
-    private void showProgress() {
-        new CountDownTimer(300000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                mProgressBar.setProgress((int) ((300000 - millisUntilFinished) * 100 / 300000));
-            }
-
-            public void onFinish() {
-            }
-
-        }.start();
+    private void startProgress() {
+        mCountDownTimer.cancel();
+        mCountDownTimer.start();
     }
+
 }

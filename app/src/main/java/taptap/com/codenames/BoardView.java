@@ -22,6 +22,7 @@ public class BoardView extends LinearLayout {
     private @BoardUtils.GameType int mGameType;
     private int[] mMask;
     private ArrayList<String> mChosenWords;
+    private OnClickListener mOnWordClickListener;
 
     public BoardView(Context context, ArrayList<String> chosenWords, int[] colorsMap, int gameType) {
         this(context);
@@ -42,6 +43,10 @@ public class BoardView extends LinearLayout {
 
     public BoardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    public void setOnWordClickListener(View.OnClickListener clickListener) {
+        mOnWordClickListener = clickListener;
     }
 
     private void init() {
@@ -81,6 +86,9 @@ public class BoardView extends LinearLayout {
                 textView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (mOnWordClickListener != null) {
+                            mOnWordClickListener.onClick(view);
+                        }
                         textView.setEnabled(false);
                     }
                 });
@@ -88,6 +96,9 @@ public class BoardView extends LinearLayout {
                 textView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (mOnWordClickListener != null) {
+                            mOnWordClickListener.onClick(view);
+                        }
                         if (textView.isEnabled()) {
                             textView.setEnabled(false);
                             textView.setBackgroundColor(getContext().getResources().getColor(color));
