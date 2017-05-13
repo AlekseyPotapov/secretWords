@@ -2,6 +2,7 @@ package taptap.com.codenames;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.ArraySet;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -13,6 +14,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by n551jm on 09.05.2017.
@@ -21,17 +24,17 @@ import java.util.HashSet;
 public class WordsConfig {
 
     private static volatile WordsConfig mInstance;
-    private HashSet<String> mWords;
+    private ArrayList<String> mWords;
 
     private WordsConfig() {
     }
 
     //br.close();
-    public HashSet<String> getWords(Context context) {
+    public ArrayList<String> getWords(Context context) {
         if (mWords != null) {
             return mWords;
         }
-        mWords = new HashSet<>();
+        mWords = new ArrayList<>();
         AssetManager am = context.getAssets();
         InputStream is = null;
         try {
@@ -39,7 +42,9 @@ public class WordsConfig {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line;
             while ((line = reader.readLine()) != null) {
-                mWords.add(line.toUpperCase());
+                if (!mWords.contains(line.toUpperCase())) {
+                    mWords.add(line.toUpperCase());
+                }
             }
             reader.close();
         } catch (IOException e) {

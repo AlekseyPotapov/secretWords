@@ -1,5 +1,6 @@
 package taptap.com.codenames;
 
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import java.util.Set;
 
@@ -15,12 +17,14 @@ public class BoardActivity extends AppCompatActivity {
     /**
      * - добавить анимацию появления карточек
      * - добавить таймер на весь экран через 5 минут
+     * - при наклоне скрывать цвета
      */
 
     public static final String TYPE = "game_type";
 
     private FrameLayout mRoot;
     private BoardUtils mBoardUtils;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +50,7 @@ public class BoardActivity extends AppCompatActivity {
             }
         });
         mRoot = (FrameLayout) findViewById(R.id.root);
-
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         createNewBoard();
     }
 
@@ -62,5 +66,19 @@ public class BoardActivity extends AppCompatActivity {
                 mBoardUtils.generateMask(),
                 getIntent().getIntExtra(TYPE, BoardUtils.TYPE_CLIENT)),
                 new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        showProgress();
+    }
+
+    private void showProgress() {
+        new CountDownTimer(300000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                mProgressBar.setProgress((int) ((300000 - millisUntilFinished) * 100 / 300000));
+            }
+
+            public void onFinish() {
+            }
+
+        }.start();
     }
 }

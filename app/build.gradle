@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+def customVersionName = "0.0.2"
+def customVersionCode= 000002
+
+def baseApkName = "secretWords"
+def appModuleName = "app"
+
 android {
     compileSdkVersion 24
     buildToolsVersion "25.0.0"
@@ -16,6 +22,19 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    applicationVariants.all { variant ->
+        def buildType = variant.buildType.name
+
+        variant.outputs.each { output ->
+            def file = output.outputFile
+            def sourceFileName = file.name
+            def correctedBaseFileName = sourceFileName.replace(appModuleName, baseApkName)
+            def correctedSuffixFileName = correctedBaseFileName.replace(buildType, customVersionName + "-" + buildType)
+            output.outputFile = new File(file.parent, correctedSuffixFileName)
+        }
+
     }
 }
 

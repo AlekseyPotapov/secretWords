@@ -23,10 +23,9 @@ public class BoardView extends LinearLayout {
     private int[] mMask;
     private ArrayList<String> mChosenWords;
 
-    public BoardView(Context context, Set<String> chosenWords, int[] colorsMap, int gameType) {
+    public BoardView(Context context, ArrayList<String> chosenWords, int[] colorsMap, int gameType) {
         this(context);
-        mChosenWords = new ArrayList<>();
-        mChosenWords.addAll(chosenWords);
+        mChosenWords = chosenWords;
         mMask = colorsMap;
         mGameType = gameType;
 

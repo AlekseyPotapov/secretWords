@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -37,9 +38,9 @@ public class BoardUtils {
         mMaskRandom = new Random(maskSeed);
     }
 
-    public Set<String> generateWords() {
-        HashSet<String> words = WordsConfig.getInstance().getWords(mContext);
-        Set<String> chosenWords = new HashSet<>(WORDS_NUMBER);
+    public ArrayList<String> generateWords() {
+        ArrayList<String> words = WordsConfig.getInstance().getWords(mContext);
+        ArrayList<String> chosenWords = new ArrayList<>(WORDS_NUMBER);
 
         final String[] strings = words.toArray(new String[words.size()]);
 
